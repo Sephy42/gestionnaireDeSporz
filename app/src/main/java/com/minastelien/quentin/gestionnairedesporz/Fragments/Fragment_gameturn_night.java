@@ -1128,43 +1128,65 @@ public class Fragment_gameturn_night extends Fragment_gameturn {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Character selected_character = gameSingleton.personnages_vivants_debut_tour.get(position);
                 String s = selected_character.getNom() + " a été :\n";
-                s += "\n    Tué : ";
-                if (gameSingleton.actions_tour_nuit.get(selected_character) != null && gameSingleton.actions_tour_nuit.get(selected_character).contains(Game.GameSingleton.Night_action.TUE)) {
-                    s += "Oui";
-                }
-
-                s += "\n    Muté : ";
-                if (gameSingleton.actions_tour_nuit.get(selected_character) != null && gameSingleton.actions_tour_nuit.get(selected_character).contains(Game.GameSingleton.Night_action.MUTE)) {
-                    s += "Oui";
-                }
-                s += "\n    Paralysé : ";
-                if (gameSingleton.actions_tour_nuit.get(selected_character) != null && gameSingleton.actions_tour_nuit.get(selected_character).contains(Game.GameSingleton.Night_action.PARALYSE)) {
-                    s += "Oui";
-                }
                 s += "\n    Infecté : ";
+
                 if (gameSingleton.actions_tour_nuit.get(selected_character) != null && gameSingleton.actions_tour_nuit.get(selected_character).contains(Game.GameSingleton.Night_action.INFECTE)) {
                     s += "Oui";
+                    s += "\n    Tué : ∅";
+                    s += "\n    Muté : ∅";
+                    s += "\n    Paralysé : ∅";
+                    s += "\n    Soigné : ∅";
+                    if (isRole(gameSingleton.PSYCHOLOGUE)) {
+                        s += "\n    Inspecté par le psychologue : ∅";
+                    }
+                    if (isRole(gameSingleton.GENETICIEN)) {
+                        s += "\n    Inspecté par le généticien : ∅";
+                    }
+                    if (isRole(gameSingleton.POLITICIEN)) {
+                        s += "\n    Inspecté par le politicien : ∅";
+                    }
                 }
-                s += "\n    Soigné : ";
-                if (gameSingleton.actions_tour_nuit.get(selected_character) != null && gameSingleton.actions_tour_nuit.get(selected_character).contains(Game.GameSingleton.Night_action.SOIGNE)) {
+
+                else {
                     s += "Oui";
-                }
-                if (isRole(gameSingleton.PSYCHOLOGUE)) {
-                    s += "\n    Inspecté par le psychologue : ";
-                    if (gameSingleton.actions_tour_nuit.get(selected_character) != null && gameSingleton.actions_tour_nuit.get(selected_character).contains(Game.GameSingleton.Night_action.PSYCHOLOGUE)) {
+                    if (gameSingleton.actions_tour_nuit.get(selected_character) != null && gameSingleton.actions_tour_nuit.get(selected_character).contains(Game.GameSingleton.Night_action.INFECTE)) {
                         s += "Oui";
                     }
-                }
-                if (isRole(gameSingleton.GENETICIEN)) {
-                    s += "\n    Inspecté par le généticien : ";
-                    if (gameSingleton.actions_tour_nuit.get(selected_character) != null && gameSingleton.actions_tour_nuit.get(selected_character).contains(Game.GameSingleton.Night_action.GENETICIEN)) {
+
+                    s += "\n    Tué : ";
+                    if (gameSingleton.actions_tour_nuit.get(selected_character) != null && gameSingleton.actions_tour_nuit.get(selected_character).contains(Game.GameSingleton.Night_action.TUE)) {
                         s += "Oui";
                     }
-                }
-                if (isRole(gameSingleton.POLITICIEN)) {
-                    s += "\n    Inspecté par le politicien : ";
-                    if (gameSingleton.actions_tour_nuit.get(selected_character) != null && gameSingleton.actions_tour_nuit.get(selected_character).contains(Game.GameSingleton.Night_action.POLITICIEN)) {
+
+                    s += "\n    Muté : ";
+                    if (gameSingleton.actions_tour_nuit.get(selected_character) != null && gameSingleton.actions_tour_nuit.get(selected_character).contains(Game.GameSingleton.Night_action.MUTE)) {
                         s += "Oui";
+                    }
+                    s += "\n    Paralysé : ";
+                    if (gameSingleton.actions_tour_nuit.get(selected_character) != null && gameSingleton.actions_tour_nuit.get(selected_character).contains(Game.GameSingleton.Night_action.PARALYSE)) {
+                        s += "Oui";
+                    }
+                    s += "\n    Soigné : ";
+                    if (gameSingleton.actions_tour_nuit.get(selected_character) != null && gameSingleton.actions_tour_nuit.get(selected_character).contains(Game.GameSingleton.Night_action.SOIGNE)) {
+                        s += "Oui";
+                    }
+                    if (isRole(gameSingleton.PSYCHOLOGUE)) {
+                        s += "\n    Inspecté par le psychologue : ";
+                        if (gameSingleton.actions_tour_nuit.get(selected_character) != null && gameSingleton.actions_tour_nuit.get(selected_character).contains(Game.GameSingleton.Night_action.PSYCHOLOGUE)) {
+                            s += "Oui";
+                        }
+                    }
+                    if (isRole(gameSingleton.GENETICIEN)) {
+                        s += "\n    Inspecté par le généticien : ";
+                        if (gameSingleton.actions_tour_nuit.get(selected_character) != null && gameSingleton.actions_tour_nuit.get(selected_character).contains(Game.GameSingleton.Night_action.GENETICIEN)) {
+                            s += "Oui";
+                        }
+                    }
+                    if (isRole(gameSingleton.POLITICIEN)) {
+                        s += "\n    Inspecté par le politicien : ";
+                        if (gameSingleton.actions_tour_nuit.get(selected_character) != null && gameSingleton.actions_tour_nuit.get(selected_character).contains(Game.GameSingleton.Night_action.POLITICIEN)) {
+                            s += "Oui";
+                        }
                     }
                 }
                 espion_tv_resultat.setText(s);
