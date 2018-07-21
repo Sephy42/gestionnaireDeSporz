@@ -231,7 +231,8 @@ public class Game {
             SOIGNE(3),
             PSYCHOLOGUE(4),
             GENETICIEN(5),
-            POLITICIEN(6);
+            POLITICIEN(6),
+            INFECTE(7);
 
             private final int value;
             Night_action(int value) {
@@ -256,8 +257,10 @@ public class Game {
                         return PSYCHOLOGUE;
                     case 5:
                         return GENETICIEN;
-                    default:
+                    case 6:
                         return POLITICIEN;
+                    default :
+                        return INFECTE;
                 }
             }
         }

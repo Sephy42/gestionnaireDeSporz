@@ -58,6 +58,7 @@
 
     <string name="mutant">"Mutant"</string>
     <string name="paralyse">"Paralysé"</string>
+    <string name="infecte">"Infecté"</string>
     <string name="sumup">"Résumé"</string>
 
     <string name="warning_quitter">"Êtes-vous sûr de quitter ?"</string>

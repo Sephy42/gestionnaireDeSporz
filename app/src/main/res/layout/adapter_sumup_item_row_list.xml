@@ -48,7 +48,8 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:text="MUTANT" />
+                android:text="MUTANT"
+                android:inputType="text|textAutoCorrect|textAutoComplete|textMultiLine" />
 
         </TableRow>
     </TableLayout>

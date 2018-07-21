@@ -7,6 +7,8 @@ import android.widget.TextView;
 import com.minastelien.quentin.gestionnairedesporz.Game.Character;
 import com.minastelien.quentin.gestionnairedesporz.Game.Game;
 import com.minastelien.quentin.gestionnairedesporz.R;
+import android.text.Spannable;
+import android.text.style.ForegroundColorSpan;
 
 import java.util.ArrayList;
 
@@ -56,10 +58,29 @@ public class Adapter_character_sumup extends Adapter_character {
             tv_gene.setText("");
         }
         if (current_character.isContamine()) {
-            tv_mutant.setText(R.string.mutant);
-            tv_mutant.setTextColor(context.getResources().getColor(R.color.colorRed));
+            if(current_character.isInfecte()) {
+                String first = context.getResources().getString(R.string.mutant);
+                String next = context.getResources().getString(R.string.infecte);
+                String full = first+" "+next;
+                tv_mutant.setText(full);
+
+                Spannable s = (Spannable)tv_mutant.getText();
+
+                int start = first.length();
+                int end =  full.length();
+
+                s.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.colorRed)),0, start, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                s.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.colorOrange)),start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            }else{
+                tv_mutant.setText(R.string.mutant);
+                tv_mutant.setTextColor(context.getResources().getColor(R.color.colorRed));
+            }
         } else if (current_character.isParalyse()) {
             tv_mutant.setText(R.string.paralyse);
+            tv_mutant.setTextColor(context.getResources().getColor(R.color.colorOrange));
+      } else if (current_character.isInfecte()) {
+            tv_mutant.setText(R.string.infecte);
             tv_mutant.setTextColor(context.getResources().getColor(R.color.colorOrange));
         } else {
             tv_mutant.setText("");

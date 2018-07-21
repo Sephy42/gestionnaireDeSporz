@@ -231,6 +231,9 @@ public class Fragment_gameturn_night extends Fragment_gameturn {
         final RadioButton mutant_bouton_muter = mutant_layout.findViewById(R.id.role_mutant_radiobutton_muter);
         mutant_bouton_muter.setChecked(true);
 
+        final RadioButton mutant_bouton_paralyser = mutant_layout.findViewById(R.id.role_mutant_radiobutton_paralyser);
+        mutant_bouton_paralyser.setChecked(true);
+
         // Les personnes pas encore contaminées et les contaminés
         String texte = "\n";
         final Set<Character> set_mutants_vivants = new HashSet<Character>();
@@ -272,7 +275,7 @@ public class Fragment_gameturn_night extends Fragment_gameturn {
                     Character perso_cible = (Character) mutant_sp.getSelectedItem();
                     Character perso_cible_paralyse = (Character) mutant_sp_paralyse.getSelectedItem();
 
-                    if (perso_cible.equals(perso_cible_paralyse)) {
+                    if ((perso_cible.equals(perso_cible_paralyse)) && (mutant_bouton_paralyser.isChecked()) ) {
                         Toast.makeText(getActivity(), "ERREUR : on ne peut pas tuer/muter et paralyser la même personne !", Toast.LENGTH_SHORT).show();
                     } else {
 
@@ -304,11 +307,18 @@ public class Fragment_gameturn_night extends Fragment_gameturn {
                             str_une_tape += perso_cible.getNom();
                         }
 
-                        // Paralyser
-                        gameSingleton.getCurrent_game().addHist_jeu("Les mutants choisissent de paralyser " + perso_cible_paralyse.getNom() + ".\n\n");
-                        perso_cible_paralyse.setParalyse(true);
-                        add_to_action_list(perso_cible_paralyse, Game.GameSingleton.Night_action.PARALYSE);
-                        str_paralyse += perso_cible_paralyse.getNom();
+                        if (mutant_bouton_paralyser.isChecked()) {
+                            // Paralyser
+                            gameSingleton.getCurrent_game().addHist_jeu("Les mutants choisissent de paralyser " + perso_cible_paralyse.getNom() + ".\n\n");
+                            perso_cible_paralyse.setParalyse(true);
+                            add_to_action_list(perso_cible_paralyse, Game.GameSingleton.Night_action.PARALYSE);
+                            str_paralyse += perso_cible_paralyse.getNom();
+                        } else {
+                            // Infecter
+                            gameSingleton.getCurrent_game().addHist_jeu("Les mutants choisissent d'infecter " + perso_cible_paralyse.getNom() + ".\n\n");
+                            perso_cible_paralyse.setInfecte(true);
+                            add_to_action_list(perso_cible_paralyse, Game.GameSingleton.Night_action.INFECTE);
+                        }
 
                         ((Activity_gameturn_night) getActivity()).update_all();
 
@@ -591,10 +601,16 @@ public class Fragment_gameturn_night extends Fragment_gameturn {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Character selected_character = tous_pers_sauf_psychologue.get(position);
-                if (selected_character.isContamine()) {
-                    psychologue_tv_resultat.setText(selected_character.getNom() + " est mutant !");
+
+                // Check que la cible n'est pas infectée
+                if (selected_character.isInfecte()) {
+                    psychologue_tv_resultat.setText("l'État de " + selected_character.getNom() + " est inaccessible");
                 } else {
-                    psychologue_tv_resultat.setText(selected_character.getNom() + " n'est pas mutant.");
+                    if (selected_character.isContamine()) {
+                        psychologue_tv_resultat.setText(selected_character.getNom() + " est mutant !");
+                    } else {
+                        psychologue_tv_resultat.setText(selected_character.getNom() + " n'est pas mutant.");
+                    }
                 }
             }
 
@@ -616,10 +632,12 @@ public class Fragment_gameturn_night extends Fragment_gameturn {
                 add_to_action_list(targeted_character, Game.GameSingleton.Night_action.PSYCHOLOGUE);
 
                 // Information pour le hacker
-                if (targeted_character.isContamine()) {
-                    gameSingleton.resultat_role_hacker.add(Game.GameSingleton.Night_action_result.PSY_MUTANT);
-                } else {
-                    gameSingleton.resultat_role_hacker.add(Game.GameSingleton.Night_action_result.PSY_SAIN);
+                if (!targeted_character.isInfecte()) {
+                    if (targeted_character.isContamine()) {
+                        gameSingleton.resultat_role_hacker.add(Game.GameSingleton.Night_action_result.PSY_MUTANT);
+                    } else {
+                        gameSingleton.resultat_role_hacker.add(Game.GameSingleton.Night_action_result.PSY_SAIN);
+                    }
                 }
                 gameSingleton.getCurrent_game().addHist_jeu("---\nTour du psychologue\n\nLe psychologue choisit d'inspecter " +
                         targeted_character.getNom() + ".\n");
@@ -660,7 +678,13 @@ public class Fragment_gameturn_night extends Fragment_gameturn {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Character selected_character = gameSingleton.personnages_vivants_debut_tour.get(position);
-                geneticien_tv_resultat.setText("Le génome de " + selected_character.getNom() + " est " + selected_character.getGene());
+                // Check que la cible n'est pas infectée
+                if (selected_character.isInfecte()) {
+                    geneticien_tv_resultat.setText("Le génome de " + selected_character.getNom() + " est inaccessible");
+                } else {
+                    geneticien_tv_resultat.setText("Le génome de " + selected_character.getNom() + " est " + selected_character.getGene());
+                }
+
             }
 
             @Override
@@ -681,12 +705,14 @@ public class Fragment_gameturn_night extends Fragment_gameturn {
                 add_to_action_list(targeted_character, Game.GameSingleton.Night_action.GENETICIEN);
 
                 // Information pour le hacker
-                if (targeted_character.getGene().equals(gameSingleton.HOTE)) {
-                    gameSingleton.resultat_role_hacker.add(Game.GameSingleton.Night_action_result.GENE_HOTE);
-                } else if (targeted_character.getGene().equals(gameSingleton.RESISTANT)) {
-                    gameSingleton.resultat_role_hacker.add(Game.GameSingleton.Night_action_result.GENE_RESISTANT);
-                } else {
-                    gameSingleton.resultat_role_hacker.add(Game.GameSingleton.Night_action_result.GENE_NORMAL);
+                if (!targeted_character.isInfecte()) {
+                    if (targeted_character.getGene().equals(gameSingleton.HOTE)) {
+                        gameSingleton.resultat_role_hacker.add(Game.GameSingleton.Night_action_result.GENE_HOTE);
+                    } else if (targeted_character.getGene().equals(gameSingleton.RESISTANT)) {
+                        gameSingleton.resultat_role_hacker.add(Game.GameSingleton.Night_action_result.GENE_RESISTANT);
+                    } else {
+                        gameSingleton.resultat_role_hacker.add(Game.GameSingleton.Night_action_result.GENE_NORMAL);
+                    }
                 }
                 gameSingleton.getCurrent_game().addHist_jeu("---\nTour du généticien\n\nLe généticien choisit d'inspecter " +
                         targeted_character.getNom() + ".\n" + geneticien_tv_resultat.getText() + "\n\n");
@@ -853,18 +879,23 @@ public class Fragment_gameturn_night extends Fragment_gameturn {
                                 hacker_tv_resultat.setText("Le psychologue a inspecté un personnage non mutant.");
                             } else if (gameSingleton.resultat_role_hacker.contains(Game.GameSingleton.Night_action_result.PSY_MUTANT)) {
                                 hacker_tv_resultat.setText("Le psychologue a inspecté un personnage mutant !");
+                            } else {
+                                hacker_tv_resultat.setText("Le psychologue a inspecté un personnage inaccessible.");
                             }
                         } else {
                             hacker_tv_resultat.setText("Le psychologue n'a pas joué cette nuit.");
                         }
+
                     } else if (role_selectionne.equals(gameSingleton.GENETICIEN)) {
                         if (gameSingleton.role_a_joue_nuit.contains(gameSingleton.GENETICIEN)) {
                             if (gameSingleton.resultat_role_hacker.contains(Game.GameSingleton.Night_action_result.GENE_NORMAL)) {
                                 hacker_tv_resultat.setText("Le généticien a inspecté un personnage de génome normal.");
                             } else if (gameSingleton.resultat_role_hacker.contains(Game.GameSingleton.Night_action_result.GENE_RESISTANT)) {
-                                hacker_tv_resultat.setText("Le psychologue a inspecté un personnage de génome résistant.");
+                                hacker_tv_resultat.setText("Le généticien a inspecté un personnage de génome résistant.");
                             } else if (gameSingleton.resultat_role_hacker.contains(Game.GameSingleton.Night_action_result.GENE_HOTE)) {
-                                hacker_tv_resultat.setText("Le psychologue a inspecté un personnage de génome hôte.");
+                                hacker_tv_resultat.setText("Le généticien a inspecté un personnage de génome hôte.");
+                            } else {
+                                hacker_tv_resultat.setText("Le généticien a inspecté un personnage inaccessible.");
                             }
                         } else {
                             hacker_tv_resultat.setText("Le généticien n'a pas joué cette nuit.");
@@ -1110,6 +1141,10 @@ public class Fragment_gameturn_night extends Fragment_gameturn {
                 if (gameSingleton.actions_tour_nuit.get(selected_character) != null && gameSingleton.actions_tour_nuit.get(selected_character).contains(Game.GameSingleton.Night_action.PARALYSE)) {
                     s += "Oui";
                 }
+                s += "\n    Infecté : ";
+                if (gameSingleton.actions_tour_nuit.get(selected_character) != null && gameSingleton.actions_tour_nuit.get(selected_character).contains(Game.GameSingleton.Night_action.INFECTE)) {
+                    s += "Oui";
+                }
                 s += "\n    Soigné : ";
                 if (gameSingleton.actions_tour_nuit.get(selected_character) != null && gameSingleton.actions_tour_nuit.get(selected_character).contains(Game.GameSingleton.Night_action.SOIGNE)) {
                     s += "Oui";
@@ -1266,6 +1301,27 @@ public class Fragment_gameturn_night extends Fragment_gameturn {
         });
     }
 
+    private void display_role_if_infecte(final Role role) {
+        lay_role_night.removeAllViews();
+        String s = role.getNom() + " - Le personnage est infecté. \n\n" + getString(role.getTexte_id());
+        TextView tv = new TextView(getActivity());
+        tv.setText(s);
+        lay_role_night.addView(tv);
+        but_next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // [versionCode 16 versionName 2.06] Make checkpoint
+                make_checkpoint();
+
+                gameSingleton.getCurrent_game().addHist_jeu("---\nLe personnage " + role.getNom() + " est infecté.\n\n");
+
+                // Passage au suivant
+                display_next_role();
+            }
+        });
+    }
+
     private void display_role_if_contamine(final Role role) {
         lay_role_night.removeAllViews();
         String s = role.getNom() + " - Le personnage est mutant.\n\n" + getString(role.getTexte_id());
@@ -1355,6 +1411,15 @@ public class Fragment_gameturn_night extends Fragment_gameturn {
     private boolean isRole_non_paralyse(Role role) {
         for (Character p : gameSingleton.getCurrent_game().getCharacters()) {
             if (p.getRole().equals(role) && !p.isMort() && !p.isParalyse()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isRole_non_infecte(Role role) {
+        for (Character p : gameSingleton.getCurrent_game().getCharacters()) {
+            if (p.getRole().equals(role) && !p.isMort() && !p.isInfecte()) {
                 return true;
             }
         }

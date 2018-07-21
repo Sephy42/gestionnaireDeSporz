@@ -91,6 +91,7 @@ public class Activity_gameturn_night extends Activity_gameturn {
         gameSingleton.resultat_role_hacker = new HashSet<>();
         for (Character p : gameSingleton.getCurrent_game().getCharacters()) {
             p.setParalyse(false);
+            p.setInfecte(false);
         }
         initialiser_liste_persos_vivants();
     }

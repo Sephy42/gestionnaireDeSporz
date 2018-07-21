@@ -12,6 +12,7 @@ public class Character {
     boolean mort;
     boolean contamine;
     boolean paralyse = false;
+    boolean infecte = false;
     boolean mort_confirme = false;
 
     public Character(String n, Role ro, Gene ge, boolean m, boolean c) {
@@ -87,4 +88,13 @@ public class Character {
     public void setParalyse(boolean paralyse) {
         this.paralyse = paralyse;
     }
+
+    public boolean isInfecte() {
+        return infecte;
+    }
+
+    public void setInfecte(boolean infecte) {
+        this.infecte = infecte;
+    }
+
 }

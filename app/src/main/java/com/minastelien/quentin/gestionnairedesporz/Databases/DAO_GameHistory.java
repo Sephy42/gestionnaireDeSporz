@@ -84,6 +84,7 @@ public class DAO_GameHistory extends DAO_Base {
             value.put(dbSingleton.CHARACTER_MORT, (p.isMort() ? 1 : 0));
             value.put(dbSingleton.CHARACTER_CONTAMINE, (p.isContamine() ? 1 : 0));
             value.put(dbSingleton.CHARACTER_PARALYSE, (p.isParalyse() ? 1 : 0));
+            value.put(dbSingleton.CHARACTER_INFECTE, (p.isInfecte() ? 1 : 0));
             value.put(dbSingleton.CHARACTER_MORT_CONFIRME, (p.isMort_confirme() ? 1 : 0));
             mDb.insert(dbSingleton.CHARACTER_TABLE_NAME, null, value);
         }
@@ -143,6 +144,7 @@ public class DAO_GameHistory extends DAO_Base {
                 dbSingleton.CHARACTER_MORT + ", " +
                 dbSingleton.CHARACTER_CONTAMINE + ", " +
                 dbSingleton.CHARACTER_PARALYSE +
+                dbSingleton.CHARACTER_INFECTE +
                 " FROM " + dbSingleton.CHARACTER_TABLE_NAME +
                 " JOIN " + dbSingleton.ROLE_TABLE_NAME + " ON " + dbSingleton.ROLE_TABLE_NAME + "." + dbSingleton.ROLE_KEY + "=" + dbSingleton.CHARACTER_ROLE_FK +
                 " JOIN " + dbSingleton.GENE_TABLE_NAME + " ON " + dbSingleton.GENE_TABLE_NAME + "." + dbSingleton.GENE_KEY + "=" + dbSingleton.CHARACTER_GENE_FK +

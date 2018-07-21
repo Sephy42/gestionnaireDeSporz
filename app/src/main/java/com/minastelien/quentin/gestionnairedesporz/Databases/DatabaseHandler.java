@@ -76,6 +76,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                         getDbSingleton().CHARACTER_MORT + " INTEGER, " +
                         getDbSingleton().CHARACTER_CONTAMINE + " INTEGER, " +
                         getDbSingleton().CHARACTER_PARALYSE + " INTEGER, " +
+                        getDbSingleton().CHARACTER_INFECTE + " INTEGER, " +
                         getDbSingleton().CHARACTER_MORT_CONFIRME + " INTEGER," +
                         "FOREIGN KEY(" + getDbSingleton().CHARACTER_JEU_FK + ") REFERENCES " + getDbSingleton().GAME_TABLE_NAME + '(' + getDbSingleton().GAME_KEY + ')' +
                         "FOREIGN KEY(" + getDbSingleton().CHARACTER_ROLE_FK + ") REFERENCES " + getDbSingleton().ROLE_TABLE_NAME + '(' + getDbSingleton().ROLE_KEY + ')' +
@@ -115,6 +116,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                         getDbSingleton().CHECKPOINT_CHARACTERS_MORT + " INTEGER, " +
                         getDbSingleton().CHECKPOINT_CHARACTERS_CONTAMINE + " INTEGER, " +
                         getDbSingleton().CHECKPOINT_CHARACTERS_PARALYSE + " INTEGER, " +
+                        getDbSingleton().CHECKPOINT_CHARACTERS_INFECTE + " INTEGER, " +
                         getDbSingleton().CHECKPOINT_CHARACTERS_MORT_CONFIRME + " INTEGER, " +
                         getDbSingleton().CHECKPOINT_CHARACTERS_VIVANT_DEB_TOUR + " INTEGER, " +
                         "FOREIGN KEY(" + getDbSingleton().CHECKPOINT_CHARACTERS_FK_CHECKPOINT + ") REFERENCES " + getDbSingleton().CHECKPOINT_TN + '(' + getDbSingleton().CHECKPOINT_PK + ')' +
@@ -274,6 +276,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         public final String CHARACTER_MORT = "p_mort";
         public final String CHARACTER_CONTAMINE = "p_contamine";
         public final String CHARACTER_PARALYSE = "p_paralyse";
+        public final String CHARACTER_INFECTE = "p_infecte";
         public final String CHARACTER_MORT_CONFIRME = "p_mort_confirme";
 
         public final String PLAYER_LISTS_TABLE_NAME = "PlayerLists";
@@ -295,6 +298,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         public final String CHECKPOINT_CHARACTERS_MORT = CHARACTER_MORT;
         public final String CHECKPOINT_CHARACTERS_CONTAMINE = CHARACTER_CONTAMINE;
         public final String CHECKPOINT_CHARACTERS_PARALYSE = CHARACTER_PARALYSE;
+        public final String CHECKPOINT_CHARACTERS_INFECTE = CHARACTER_INFECTE;
         public final String CHECKPOINT_CHARACTERS_MORT_CONFIRME = CHARACTER_MORT_CONFIRME;
         // Useless but implemented
         public final String CHECKPOINT_CHARACTERS_VIVANT_DEB_TOUR = "p_vivant_deb_tour";

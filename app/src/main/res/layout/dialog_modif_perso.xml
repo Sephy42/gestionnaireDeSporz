@@ -21,10 +21,17 @@
         android:text="Le personnage est paralysé" />
 
     <CheckBox
-        android:id="@+id/dialog_check_contamine"
+        android:id="@+id/dialog_check_infecte"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/dialog_check_paralyse"
+        android:text="Le personnage est infecté" />
+
+    <CheckBox
+        android:id="@+id/dialog_check_contamine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dialog_check_infecte"
         android:text="Le personnage est contaminé" />
 
     <CheckBox

@@ -113,6 +113,7 @@ public class DAO_Checkpoint extends DAO_Base {
                             dbSingleton.CHECKPOINT_CHARACTERS_MORT + ", " +
                             dbSingleton.CHECKPOINT_CHARACTERS_CONTAMINE + ", " +
                             dbSingleton.CHECKPOINT_CHARACTERS_PARALYSE + ", " +
+                            dbSingleton.CHECKPOINT_CHARACTERS_INFECTE + ", " +
                             dbSingleton.CHECKPOINT_CHARACTERS_MORT_CONFIRME + ", " +
                             dbSingleton.CHECKPOINT_CHARACTERS_VIVANT_DEB_TOUR +
                             " FROM " + dbSingleton.CHECKPOINT_CHARACTERS_TN +
@@ -129,6 +130,7 @@ public class DAO_Checkpoint extends DAO_Base {
                     character.setMort(c.getInt(1) == 1);
                     character.setContamine(c.getInt(2) == 1);
                     character.setParalyse(c.getInt(3) == 1);
+                    character.setInfecte(c.getInt(6) == 1);
                     character.setMort_confirme(c.getInt(4) == 1);
 
                     // Add the character to the "vivant deb tour" list
@@ -345,6 +347,7 @@ public class DAO_Checkpoint extends DAO_Base {
             values.put(dbSingleton.CHECKPOINT_CHARACTERS_MORT, character.isMort() ? 1 : 0);
             values.put(dbSingleton.CHECKPOINT_CHARACTERS_CONTAMINE, character.isContamine() ? 1 : 0);
             values.put(dbSingleton.CHECKPOINT_CHARACTERS_PARALYSE, character.isParalyse() ? 1 : 0);
+            values.put(dbSingleton.CHECKPOINT_CHARACTERS_INFECTE, character.isInfecte() ? 1 : 0);
             values.put(dbSingleton.CHECKPOINT_CHARACTERS_MORT_CONFIRME, character.isMort_confirme() ? 1 : 0);
             values.put(dbSingleton.CHECKPOINT_CHARACTERS_VIVANT_DEB_TOUR, gameSingleton.personnages_vivants_debut_tour.contains(character) ? 1 : 0);
             mDb.insert(dbSingleton.CHECKPOINT_CHARACTERS_TN, null, values);

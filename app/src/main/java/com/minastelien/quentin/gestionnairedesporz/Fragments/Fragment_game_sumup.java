@@ -158,6 +158,7 @@ public class Fragment_game_sumup extends Fragment_main {
             builder.setTitle("Modifier personnage");
             RelativeLayout lay_dialog = (RelativeLayout) RelativeLayout.inflate(getActivity(), R.layout.dialog_modif_perso, null);
             final CheckBox check_paralyse = lay_dialog.findViewById(R.id.dialog_check_paralyse);
+            final CheckBox check_infecte = lay_dialog.findViewById(R.id.dialog_check_infecte);
             final CheckBox check_contamine = lay_dialog.findViewById(R.id.dialog_check_contamine);
             final CheckBox check_mort = lay_dialog.findViewById(R.id.dialog_check_mort);
 
@@ -165,6 +166,12 @@ public class Fragment_game_sumup extends Fragment_main {
                 check_paralyse.setChecked(true);
             } else {
                 check_paralyse.setChecked(false);
+            }
+
+            if (gameSingleton.getCurrent_game().getCharacters().get(indice_personnage).isInfecte()) {
+                check_infecte.setChecked(true);
+            } else {
+                check_infecte.setChecked(false);
             }
 
             if (gameSingleton.getCurrent_game().getCharacters().get(indice_personnage).isContamine()) {
@@ -197,6 +204,10 @@ public class Fragment_game_sumup extends Fragment_main {
                     if (check_paralyse.isChecked() != gameSingleton.getCurrent_game().getCharacters().get(indice_personnage).isParalyse()) {
                         gameSingleton.getCurrent_game().getCharacters().get(indice_personnage).setParalyse(check_paralyse.isChecked());
                         gameSingleton.getCurrent_game().addHist_jeu("$$$ La main du destin :\n" + gameSingleton.getCurrent_game().getCharacters().get(indice_personnage).getNom() + " est paralysé : " + check_paralyse.isChecked() + "\n\n");
+                    }
+                    if (check_infecte.isChecked() != gameSingleton.getCurrent_game().getCharacters().get(indice_personnage).isInfecte()) {
+                        gameSingleton.getCurrent_game().getCharacters().get(indice_personnage).setInfecte(check_infecte.isChecked());
+                        gameSingleton.getCurrent_game().addHist_jeu("$$$ La main du destin :\n" + gameSingleton.getCurrent_game().getCharacters().get(indice_personnage).getNom() + " est infecté : " + check_infecte.isChecked() + "\n\n");
                     }
                     if (check_contamine.isChecked() != gameSingleton.getCurrent_game().getCharacters().get(indice_personnage).isContamine()) {
                         gameSingleton.getCurrent_game().getCharacters().get(indice_personnage).setContamine(check_contamine.isChecked());
