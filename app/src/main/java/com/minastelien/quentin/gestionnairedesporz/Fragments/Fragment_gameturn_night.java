@@ -1148,11 +1148,6 @@ public class Fragment_gameturn_night extends Fragment_gameturn {
                 }
 
                 else {
-                    s += "Oui";
-                    if (gameSingleton.actions_tour_nuit.get(selected_character) != null && gameSingleton.actions_tour_nuit.get(selected_character).contains(Game.GameSingleton.Night_action.INFECTE)) {
-                        s += "Oui";
-                    }
-
                     s += "\n    Tué : ";
                     if (gameSingleton.actions_tour_nuit.get(selected_character) != null && gameSingleton.actions_tour_nuit.get(selected_character).contains(Game.GameSingleton.Night_action.TUE)) {
                         s += "Oui";
@@ -1482,6 +1477,7 @@ public class Fragment_gameturn_night extends Fragment_gameturn {
         try {
             Set<Game.GameSingleton.Night_action> set = gameSingleton.actions_tour_nuit.get(cible);
             set.add(action);
+
             gameSingleton.actions_tour_nuit.put(cible, set);
         } catch (NullPointerException e) {
             Set<Game.GameSingleton.Night_action> set = new HashSet<Game.GameSingleton.Night_action>();
