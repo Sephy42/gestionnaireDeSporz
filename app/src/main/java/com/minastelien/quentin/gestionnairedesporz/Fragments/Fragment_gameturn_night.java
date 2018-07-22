@@ -151,9 +151,9 @@ public class Fragment_gameturn_night extends Fragment_gameturn {
                     if (!isRole_vivant(role)) {
                         display_role_if_mort(role);
                         getActivity().setTitle("Nuit " + gameSingleton.getCurrent_game().getTurn_count() + " - " + role.getNom());
-                    } else if (!isRole_non_contamine(role)) {
-                        display_role_if_contamine(role);
-                        getActivity().setTitle("Nuit " + gameSingleton.getCurrent_game().getTurn_count() + " - " + role.getNom());
+                //    } else if (!isRole_non_contamine(role)) {
+                //        display_role_if_contamine(role);
+                //       getActivity().setTitle("Nuit " + gameSingleton.getCurrent_game().getTurn_count() + " - " + role.getNom());
                     } else if (!isRole_non_paralyse(role)) {
                         display_role_if_paralyse(role);
                         getActivity().setTitle("Nuit " + gameSingleton.getCurrent_game().getTurn_count() + " - " + role.getNom());
@@ -1149,6 +1149,7 @@ public class Fragment_gameturn_night extends Fragment_gameturn {
 
                 else {
                     s += "\n    Tué : ";
+
                     if (gameSingleton.actions_tour_nuit.get(selected_character) != null && gameSingleton.actions_tour_nuit.get(selected_character).contains(Game.GameSingleton.Night_action.TUE)) {
                         s += "Oui";
                     }
@@ -1477,7 +1478,6 @@ public class Fragment_gameturn_night extends Fragment_gameturn {
         try {
             Set<Game.GameSingleton.Night_action> set = gameSingleton.actions_tour_nuit.get(cible);
             set.add(action);
-
             gameSingleton.actions_tour_nuit.put(cible, set);
         } catch (NullPointerException e) {
             Set<Game.GameSingleton.Night_action> set = new HashSet<Game.GameSingleton.Night_action>();
