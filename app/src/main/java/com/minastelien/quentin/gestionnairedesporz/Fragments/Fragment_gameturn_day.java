@@ -80,6 +80,7 @@ public class Fragment_gameturn_day extends Fragment_gameturn {
         getActivity().setTitle("Jour " + gameSingleton.getCurrent_game().getTurn_count());
 
         update();
+        //gameSingleton.dernier_moucharde_a_joue = false;
 
         return lay_global_fragment;
     }

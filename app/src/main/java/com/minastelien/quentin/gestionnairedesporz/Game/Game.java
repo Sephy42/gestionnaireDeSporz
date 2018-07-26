@@ -136,7 +136,9 @@ public class Game {
         public final Role ESPION = new Role("Espion", "Chaque nuit l'Espion désigne un joueur. Il apprend si sa cible a oui ou non été mutée, tuée, paralysée, soignée, ou inspectée par le psychologue, par le généticien cette nuit cette nuit. Il n'a acces à aucune de ces informations si sa cible a été infectée. (le meneur fait oui ou non de la tête à chaque fois pour que seul l'Espion sache exactement ce qu'il est arrivé à sa cible cette nuit).", Role.Side.HUMAIN, false, R.layout.fragment_role_default, R.string.texte_espion);
         public final Role PEINTRE = new Role("Peintre", "Chaque nuit, le Peintre désigne un joueur et dépose de la peinture sur sa porte. Il peut retracer toutes les personnes ayant été en contact d'une manière ou d'une autre avec ce joueur.", Role.Side.HUMAIN, false, R.layout.fragment_role_default, R.string.texte_peintre);
         public final Role FANATIQUE = new Role("Fanatique", "Le Fanatique n'a pas de pouvoir spécial, mais il gagne la partie si les mutants gagnent.", Role.Side.MUTANT, false, R.layout.fragment_role_simple_astronaute, R.string.texte_default);
+        public final Role MOUCHARD = new Role("Mouchard", "Pose un device sur une cible. À la fin de la nuit le mouchard sait ce qui est arrivé à la cible. La nuit suivante le dernier mouchardé choisi sur qui poser le device. Quand le mouchard se reveille pour recolter les données, il ne sait pas de quelle cible elles proviennent...", Role.Side.HUMAIN, false, R.layout.fragment_role_textonly, R.string.texte_mouchard);
         public final Role SIMPLE_ASTRONAUTE = new Role("Simple astronaute", "L'Astronaute garde les yeux fermés toute la nuit.\nN'étant pas indispensable, il peut donc prendre plus de risques en journée lorsqu'il bluffe.\nDe plus, lorsqu'il se fait paralyser il a la garantie que TOUS les autres joueurs ont pu agir : en servant de paratonnerre il fait avancer la cause de son camp.", Role.Side.HUMAIN, false, R.layout.fragment_role_simple_astronaute, R.string.texte_default);
+
         public final ArrayList<Role> ROLES_LIST = new ArrayList<Role>() {{
             add(MUTANT_DE_BASE);
             add(MEDECIN);
@@ -149,6 +151,7 @@ public class Game {
             add(ESPION);
             add(PEINTRE);
             add(FANATIQUE);
+            add(MOUCHARD);
             add(SIMPLE_ASTRONAUTE);
         }};
         public final ArrayList<Role> ROLES_LIST_NIGHT = new ArrayList<Role>() {{
@@ -162,6 +165,7 @@ public class Game {
             add(APPRENTI_HACKER);
             add(ESPION);
             add(PEINTRE);
+            add(MOUCHARD);
         }};
         public final ArrayList<Role> ROLES_LIST_HACKER = new ArrayList<Role>() {{
             add(INFORMATICIEN);
@@ -189,6 +193,11 @@ public class Game {
         public HashMap<Character, Set<Night_action>> actions_tour_nuit = new HashMap<>();
         public HashSet<Night_action_result> resultat_role_hacker = new HashSet<>();
         public HashMap<Character, Character> resultats_votes_jour = new HashMap<>();
+        public String nom_dernier_moucharde;
+        public final int layout_dernier_moucharde = R.layout.fragment_role_default;
+        public final int texte_dernier_moucharde = R.string.texte_dernier_moucharde;
+        public Gene resultat_role_mouchard;
+        public boolean dernier_moucharde_a_joue = false;
         /**
          * The singleton Game instance.
          */
@@ -232,7 +241,9 @@ public class Game {
             PSYCHOLOGUE(4),
             GENETICIEN(5),
             POLITICIEN(6),
-            INFECTE(7);
+            INFECTE(7),
+            MOUCHARD(8),
+            DERNIER_MOUCHARDE(9);
 
             private final int value;
             Night_action(int value) {
@@ -259,8 +270,12 @@ public class Game {
                         return GENETICIEN;
                     case 6:
                         return POLITICIEN;
-                    default :
+                    case 7:
                         return INFECTE;
+                    case 8:
+                        return MOUCHARD;
+                    default:
+                        return DERNIER_MOUCHARDE;
                 }
             }
         }

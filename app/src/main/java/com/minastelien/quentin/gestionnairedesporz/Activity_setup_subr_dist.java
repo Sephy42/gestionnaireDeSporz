@@ -155,15 +155,16 @@ public class Activity_setup_subr_dist extends Activity_main {
                     }
 
                     /*
-                     * Distribution des génomes
+                     * Distribution des génomes et les états
                      */
 
-                    // Les mutants de base sont forcément hôtes
+                    // Les mutants de base sont forcément hôtes et contamiés
                     for (Character p : gameSingleton.getCurrent_game().getCharacters()) {
                         if (!p.getRole().equals(gameSingleton.MUTANT_DE_BASE)) {
                             p.setGene(gameSingleton.NORMAL);
                         } else {
                             p.setGene(gameSingleton.HOTE);
+                            //p.setContamine(true); //test
                         }
                     }
 

@@ -93,6 +93,7 @@ public class Activity_setup_subr extends Activity_main {
             }
             if (p.getRole().equals(gameSingleton.MUTANT_DE_BASE)) {
                 is_there_mutant = true;
+               // p.setContamine(true); //could be better
             }
             if (p.getRole().equals(gameSingleton.MEDECIN)) {
                 is_there_medecin = true;

@@ -37,6 +37,8 @@
     <string name="bout_commencer">"Commencer le jeu"</string>
     <string name="bout_annuler">"Annuler"</string>
 
+    <string name="texte_dernier_moucharde">"Le dernier mouchardé se reveille et désigne la prochaine personne à porter le device"</string>
+    <string name="texte_mouchard_premiere_nuit">"Le mouchard se reveille et désigne la première personne à porter le device"</string>
     <string name="texte_mutant">"Les mutants se réveillent et choisissent une personne à muter ou une personne à tuer..."</string>
     <string name="texte_medecin">"Les médecins se réveillent et choisissent une personne à soigner chacun ou une personne à tuer ensemble..."</string>
     <string name="texte_informaticien">"L'informaticien se réveille et prend connaissance du nombre de mutants à bord..."</string>
@@ -47,6 +49,7 @@
     <string name="texte_apprenti_hacker">"L'apprenti hacker se réveille et désigne un rôle à hacker...\n\n(Informaticien, Psychologue, Généticien, Politicien)"</string>
     <string name="texte_espion">"L'espion se réveille et désigne une personne à espionner...\n\n(Tué, Muté, Paralysé, Soigné, Psychologue, Généticien, Politicien)"</string>
     <string name="texte_peintre">"Le peintre se réveille et désigne une personne qu'il veut marquer..."</string>
+    <string name="texte_mouchard">"Le mouchard se reveille et prend connaissance du génome de la cible du device"</string>
     <string name="texte_default">"Ce personnage ne joue pas la nuit !"</string>
 
     <string name="yes">"Oui"</string>

@@ -121,8 +121,19 @@ public class Fragment_gameturn_night extends Fragment_gameturn {
             lay_role_night.removeAllViews();
             Role role = Game.getGameSingleton().ROLES_LIST_NIGHT.get(index);
 
+            // TOUR DU DERNIER MOUCHARDE
+
+            boolean il_y_a_un_mouchard = (isRole(gameSingleton.MOUCHARD) && isRole_vivant(gameSingleton.MOUCHARD));
+
+            if ((il_y_a_un_mouchard) && (!gameSingleton.dernier_moucharde_a_joue)){
+                display_tour_dernier_moucharde();
+                getActivity().setTitle("Nuit " + gameSingleton.getCurrent_game().getTurn_count() + " - " + "Dernier Mouchardé");
+                gameSingleton.dernier_moucharde_a_joue = true;
+            }
+
+
             // TOUR DES MUTANTS
-            if (role.equals(gameSingleton.MUTANT_DE_BASE)) {
+            else if (role.equals(gameSingleton.MUTANT_DE_BASE)) {
                 gameSingleton.role_a_joue_nuit.add(role);
                 display_role_mutant_de_base();
                 getActivity().setTitle("Nuit " + gameSingleton.getCurrent_game().getTurn_count() + " - " + "Mutants");
@@ -177,6 +188,7 @@ public class Fragment_gameturn_night extends Fragment_gameturn {
                 but_next.setText("Terminer tour");
             }
         } else {
+            gameSingleton.dernier_moucharde_a_joue = false;
             // Passer écran suivant
             Intent secondeActivite = new Intent(getActivity(), Activity_gameturn_day.class);
             startActivity(secondeActivite);
@@ -199,6 +211,7 @@ public class Fragment_gameturn_night extends Fragment_gameturn {
         button_click_caught = false;
     }
 
+
     private void display_special_role(Role role) {
         if (role.equals(gameSingleton.INFORMATICIEN)) {
             display_role_informaticien();
@@ -216,6 +229,8 @@ public class Fragment_gameturn_night extends Fragment_gameturn {
             display_role_espion();
         } else if (role.equals(gameSingleton.PEINTRE)) {
             display_role_peintre();
+        } else if (role.equals(gameSingleton.MOUCHARD)) {
+            display_role_mouchard();
         }
     }
 
@@ -1276,6 +1291,143 @@ public class Fragment_gameturn_night extends Fragment_gameturn {
                 display_next_role();
             }
         });
+    }
+
+    private void display_tour_dernier_moucharde() {
+
+        //RelativeLayout dernier_moucharde_layout =(RelativeLayout) RelativeLayout.inflate(getActivity(), gameSingleton.PSYCHOLOGUE.getLayout_id(), null);
+
+         RelativeLayout dernier_moucharde_layout = (RelativeLayout) RelativeLayout.inflate(getActivity(), gameSingleton.layout_dernier_moucharde, null);
+        lay_role_night.addView(dernier_moucharde_layout);
+
+        TextView dernier_moucharde_tv_desc = dernier_moucharde_layout.findViewById(R.id.role_simple_tv_desc);
+        final Spinner dernier_moucharde_spinner = dernier_moucharde_layout.findViewById(R.id.role_simple_spinner);
+
+        final Character pers_dernier_moucharde;
+        Character pers_tmp = gameSingleton.BLANK;
+        final ArrayList<Character> tous_pers_sauf_dernier_moucharde = new ArrayList<Character>();
+
+        // Qui est le dernier_moucharde ?
+        if (gameSingleton.getCurrent_game().getTurn_count() > 1) {
+            for (Character p : gameSingleton.personnages_vivants_debut_tour) {
+                if (p.getNom().equals(gameSingleton.nom_dernier_moucharde)) {
+                    pers_tmp = p;
+                } else {
+                    tous_pers_sauf_dernier_moucharde.add(p);
+                }
+            }
+
+            pers_dernier_moucharde = pers_tmp;
+
+            dernier_moucharde_tv_desc.setText("\n  " + pers_dernier_moucharde.getNom() +
+                    "\n\n" + getString(R.string.texte_dernier_moucharde));
+
+        }else{ //si premier tour, c'est le mouchard
+            for (Character p : gameSingleton.personnages_vivants_debut_tour) {
+                if (p.getRole().equals(gameSingleton.MOUCHARD)) {
+                    pers_tmp = p;
+                } else {
+                    tous_pers_sauf_dernier_moucharde.add(p);
+                }
+            }
+            pers_dernier_moucharde = pers_tmp;
+
+            dernier_moucharde_tv_desc.setText("\n  " + pers_dernier_moucharde.getNom() +
+                    "\n\n" + getString(R.string.texte_mouchard_premiere_nuit));
+        }
+
+
+        ArrayAdapter<Character> dernier_moucharde_adapter = new ArrayAdapter<Character>(getActivity(), R.layout.spinner_theme, tous_pers_sauf_dernier_moucharde);
+        dernier_moucharde_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dernier_moucharde_spinner.setAdapter(dernier_moucharde_adapter);
+
+        dernier_moucharde_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Character selected_character = tous_pers_sauf_dernier_moucharde.get(position);
+                /*mettre à jouer le dernier moucharde*/
+                gameSingleton.nom_dernier_moucharde = selected_character.getNom();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Rien
+            }
+        });
+
+        but_next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // [versionCode 16 versionName 2.06] Make checkpoint
+                make_checkpoint();
+
+                Character targeted_character = (Character) dernier_moucharde_spinner.getSelectedItem();
+                add_to_visit_list(targeted_character, pers_dernier_moucharde);
+                add_to_action_list(targeted_character, Game.GameSingleton.Night_action.DERNIER_MOUCHARDE);
+
+                // Information pour le mouchard
+                gameSingleton.resultat_role_mouchard = targeted_character.getGene();
+
+
+                if (gameSingleton.getCurrent_game().getTurn_count() > 1) {
+                    gameSingleton.getCurrent_game().addHist_jeu("---\nTour du dernier mouchardé\n\nLe dernier mouchardé choisit de poser le device sur " +
+                            targeted_character.getNom() + ".\n");
+                } else {
+                    gameSingleton.getCurrent_game().addHist_jeu("---\nPremier tour du mouchard\n\nLe mouchard choisit de poser le device sur " +
+                            targeted_character.getNom() + ".\n");
+                }
+                ((Activity_gameturn_night) getActivity()).update_all();
+               // display_next_role_after_mouchard();
+
+            }
+        });
+
+    }
+
+    private void display_role_mouchard() {
+
+        RelativeLayout mouchard_layout = (RelativeLayout) RelativeLayout.inflate(getActivity(), gameSingleton.MOUCHARD.getLayout_id(), null);
+        lay_role_night.addView(mouchard_layout);
+
+        TextView mouchard_tv_desc = mouchard_layout.findViewById(R.id.fragment_role_textonly_tv);
+
+
+        // Qui est le mouchard ?
+        Character pers_tmp = gameSingleton.BLANK;
+        for (Character p : gameSingleton.personnages_vivants_debut_tour) {
+            if (p.getRole().equals(gameSingleton.MOUCHARD)) {
+                pers_tmp = p;
+                break;
+            }
+        }
+        final Character pers_mouchard = pers_tmp;
+
+
+        // Qui est le dernier mouchardé ?
+       for (Character p : gameSingleton.personnages_vivants_debut_tour) {
+            if (p.getNom().equals(gameSingleton.nom_dernier_moucharde)) {
+                pers_tmp = p;
+            }
+        }
+        final Character moucharde = pers_tmp;
+
+        mouchard_tv_desc.setText("\n  " + pers_mouchard.getNom() + "\n\n" + getString(R.string.texte_mouchard) + "\n\n" + gameSingleton.resultat_role_mouchard.toString() + "\n\n");
+
+
+        but_next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // [versionCode 16 versionName 2.06] Make checkpoint
+                make_checkpoint();
+
+                gameSingleton.getCurrent_game().addHist_jeu("---\nTour du mouchard\n\nLe mouchard découvre que le mouchardé (" + moucharde.getNom() + ") est de génôme " + gameSingleton.resultat_role_mouchard.toString() + ".\n\n");
+                display_next_role();
+
+            }
+        });
+
     }
 
     private void display_role_if_mort(final Role role) {
